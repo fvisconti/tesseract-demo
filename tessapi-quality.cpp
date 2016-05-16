@@ -6,7 +6,7 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 // include tesseract baseapi.h with the right path
-#include </mnt/oldstella/idsfm/tesseract-3.03/api/baseapi.h>
+#include <tesseract-3.03/api/baseapi.h>
 
 void getCompImage(const char* filename, int page){
 

@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <iostream>
-#include </usr/local/include/leptonica/allheaders.h>
+//#include </usr/local/include/leptonica/allheaders.h>
+#include </usr/local/Cellar/leptonica/1.71_1/include/leptonica/allheaders.h>
 #include <omp.h>
 #include <sys/time.h>
 #include <sys/syscall.h>
 #include <unistd.h>
 // include tesseract baseapi.h with the right path
-#include <tesseract-3.03/api/baseapi.h>
+#include </Users/satavtar/github/tesseract/api/baseapi.h>
 
 void getCompImage(const char* filename, int page){
 
@@ -54,15 +55,14 @@ void getCompImage(const char* filename, int page){
         //  printf("Found %d textline image components.\n", boxes->n);
 #pragma omp for schedule(dynamic, 1) 
         for (int i = 0; i < boxes->n; i++) {
-            status = syscall(SYS_getcpu, &cpu, NULL, NULL);
             BOX* box = boxaGetBox(boxes, i, L_CLONE);
 
             papi->SetRectangle(box->x, box->y, box->w, box->h);
             char* ocrResult = papi->GetUTF8Text();
             int my_thread = omp_get_thread_num();
             //int conf = papi->MeanTextConf();
-            fprintf(stdout, "Cpu: %d, Thread %d, Page %d: Box[%d], text: %s",
-                    cpu,     my_thread, page,          i, ocrResult);
+            fprintf(stdout, "Thread %d, Page %d: Box[%d], text: %s",
+                         my_thread, page,          i, ocrResult);
         }
         // Destroy used object and release memory
         papi->End();

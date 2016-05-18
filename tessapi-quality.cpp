@@ -33,7 +33,7 @@ void getCompImage(const char* filename, int page){
 
     //fo = fopen("output.txt", "a+t");
     */
-    printf("Running line by line example..\n\n\n");
+	std::cout << "Running line by line example..\n\n\n";
     image = pixReadTiff(filename, page);
 
     // set number of threads to use
@@ -46,7 +46,10 @@ void getCompImage(const char* filename, int page){
         tesseract::TessBaseAPI *papi = new tesseract::TessBaseAPI();
         // Initialize tesseract-ocr with English, without specifying tessdata path
         if (papi->Init(NULL, "eng")) {
-            fprintf(stdout, "Could not initialize tesseract.\n");
+#pragma omp critical
+			{
+            	std::cout << "Could not initialize tesseract " << '\n';
+			}
             exit(1);
         }
 
@@ -57,13 +60,13 @@ void getCompImage(const char* filename, int page){
 #pragma omp for schedule(static) 
         for (int i = 0; i < boxes->n; i++) {
             BOX* box = boxaGetBox(boxes, i, L_CLONE);
-
             papi->SetRectangle(box->x, box->y, box->w, box->h);
             char* ocrResult = papi->GetUTF8Text();
             int my_thread = omp_get_thread_num();
-            //int conf = papi->MeanTextConf();
-            fprintf(stdout, "Thread %d, Page %d: Box[%d], text: %s",
-                         my_thread, page,          i, ocrResult);
+#pragma omp critical
+			{
+				std::cout << "Thread: " << my_thread << " Page: " << page << " Box[" << i << "] text: " << ocrResult << "\n";
+			}
         }
         // Destroy used object and release memory
         papi->End();

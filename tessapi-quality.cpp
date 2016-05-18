@@ -52,8 +52,9 @@ void getCompImage(const char* filename, int page){
 
         papi->SetImage(image);
         Boxa* boxes = papi->GetComponentImages(tesseract::RIL_TEXTLINE, true, pixa, blockids);
+#pragma omp barrier
         //  printf("Found %d textline image components.\n", boxes->n);
-#pragma omp for schedule(dynamic, 1) 
+#pragma omp for schedule(static) 
         for (int i = 0; i < boxes->n; i++) {
             BOX* box = boxaGetBox(boxes, i, L_CLONE);
 

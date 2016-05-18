@@ -5,7 +5,7 @@ LLIB = -L/usr/local/lib
 OPT = -llept -ltesseract -O3
 VEC = -ftree-vectorize -ftree-vectorizer-verbose=1
 PAR = -fopenmp 
-DEBUG = -E -C
+DEBUG = -g
 
 all: tessapi-quality
 

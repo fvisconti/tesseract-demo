@@ -13,7 +13,6 @@ void getCompImage(const char* filename, int page){
 
     Pix* image;
     struct timeval start, end;
-    int cpu, status;
     double delta;
     Pixa** pixa;
     int** blockids;
@@ -37,7 +36,7 @@ void getCompImage(const char* filename, int page){
     image = pixReadTiff(filename, page);
 
     // set number of threads to use
-    int num_threads = 4;
+    int num_threads = 8;
     omp_set_num_threads(num_threads);
 
     gettimeofday(&start, NULL);
